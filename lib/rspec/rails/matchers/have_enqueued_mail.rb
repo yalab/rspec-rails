@@ -73,7 +73,11 @@ module RSpec
         def arguments_match?(job)
           @args =
             if @mail_args.any?
-              base_mailer_args + @mail_args
+              if unified_mail?(job) && @mail_args.none?(RSpec::Matchers::AliasedMatcher)
+                base_mailer_args.dup.push(args: @mail_args)
+              else
+                base_mailer_args + @mail_args
+              end
             elsif @mailer_class && @method_name
               base_mailer_args + [any_args]
             elsif @mailer_class
