@@ -389,6 +389,13 @@ RSpec.describe "HaveEnqueuedMail matchers", :skip => !RSpec::Rails::FeatureCheck
           a_hash_including(:params => { 'foo' => 'bar' }, :args => [1, 2])
         )
       end
+
+      it "passws when argument is kind of ActiveRecord::Base" do
+        model = ::MockableModel.create!
+        expect {
+          UnifiedMailer.email_with_args(1, model).deliver_later
+        }.to have_enqueued_mail(UnifiedMailer, :email_with_args).with(1, model)
+      end
     end
   end
 end

@@ -25,8 +25,10 @@ end
 
 class MockableModel < ActiveRecord::Base
   extend Connections
+  include GlobalID::Identification
   has_one :associated_model
 end
+GlobalID.app = 'rspec-rails'
 
 class SubMockableModel < MockableModel
 end
